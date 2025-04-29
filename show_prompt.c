@@ -62,13 +62,13 @@ void print_cmds(t_main main_st)
 
 void    set_main_st(t_main *main_st)
 {
-    main_st->qtd_cmds = ft_count_cmd(main_st, main_st->tkns) + 1;
-    //main_st->cmds = 
-	ft_create_cmds(main_st, -1);
-    //main_st->status = -1; 
+	main_st->qtd_cmds = ft_count_cmd(main_st, main_st->tkns) + 1;
+	//main_st->cmds = 
 	main_st->stdin_dup = dup(STDIN_FILENO);
-    main_st->stdout_dup = dup(STDOUT_FILENO);
-    //main_st->has_pipe = 0;
+	main_st->stdout_dup = dup(STDOUT_FILENO);
+	ft_create_cmds(main_st, -1);
+	//main_st->status = -1; 
+	//main_st->has_pipe = 0;
 }
 
 int	cmds_validator(t_tkn *tkns)

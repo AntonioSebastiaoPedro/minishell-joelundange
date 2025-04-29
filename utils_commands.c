@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_commands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llundage <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 02:53:53 by llundage          #+#    #+#             */
-/*   Updated: 2025/04/24 03:12:05 by llundage         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:23:59 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	ft_set_cmds(t_main *main)
 	{
 		main->cmds[i].qtd_tkns = 0;
 		main->cmds[i].tkns = NULL;
-		main->cmds[i].read_from = -42;
-		main->cmds[i].write_to = -42;
+		main->cmds[i].read_from = main->stdin_dup;
+		main->cmds[i].write_to = main->stdout_dup;
 		main->cmds[i].pipe_fd[0] = -1;
 		main->cmds[i].pipe_fd[1] = -1;
 		main->cmds[i].exit_status = 0;

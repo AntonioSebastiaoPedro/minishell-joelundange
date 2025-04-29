@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   binaries.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llundage <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:39:02 by llundage          #+#    #+#             */
-/*   Updated: 2025/04/25 16:39:19 by llundage         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:47:55 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,42 @@ void	ft_execute_binary(t_main *main, t_cmd *cmd)
 	if (is_invalid_redir(cmd))
 		return ;
 	//apply_redirections(cmd);
-	pid = fork();
-	if (pid == -1)
-		handle_fork_error(cmd);
-	handle_signals_in_child();
-	if (pid == 0)
-		execute_cmd(main, cmd);
-	else
+	if (&main->cmds[main->qtd_cmds - 1] != cmd)
+	{
+		// ft_putstr_fd("Primeiro\n", 1);
+		pid = fork();
+		if (pid == -1)
+			handle_fork_error(cmd);
+		handle_signals_in_child();
+		if (pid == 0)
+		{
+			
+			dup2(cmd->read_from, STDIN_FILENO);
+			dup2(cmd->write_to, STDOUT_FILENO);
+			close(cmd->read_from);
+			close(cmd->write_to);
+			execute_cmd(main, cmd);
+		}
+		close(cmd->write_to);
+		if (cmd->read_from != main->stdin_dup)
+			close(cmd->read_from);
 		wait_for_child(main, pid);
+	}
+	else
+	{
+		// ft_putstr_fd("Último\n", 1);
+		pid = fork();
+		if (pid == -1)
+			handle_fork_error(cmd);
+		handle_signals_in_child();
+		if (pid == 0)
+		{
+			dup2(cmd->read_from, STDIN_FILENO);
+			execute_cmd(main, cmd);
+		}
+		if (cmd->read_from != main->stdin_dup)
+			close(cmd->read_from);
+		wait_for_child(main, pid);
+	}
+	
 }
